@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IPDL Display</title>
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link href="styles/ipdl_display.css" rel="stylesheet">
+    
+    <script id="template-featured-event" type="text/x-handlebars-template">
+        <div class="slide featured" style="background-image: url('{{thumbnail_url}}')">
+            <div class="label">
+                Upcoming Event
+            </div>
+            <div class="caption caption-event">
+                <div class="event-info">
+                    <h2 class="event-title fill-featured-event-title">{{summary}}</h2>
+                    <p class="event-description fill-featured-event-description">{{description}}</p>
+                </div>
+                <div class="event-calendar">
+                    <div class="event-month fill-featured-event-month">{{month}}</div>
+                    <div class="event-date fill-featured-event-date">{{date}}</div>
+                    <div class="event-time fill-featured-event-time">{{time}}</div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script id="template-upcoming-event" type="text/x-handlebars-template">
+        <table class="event-table" id="fill-upcoming-events">
+            {{#each events}}
+                <tr>
+                    <td class="nowrap">{{startDate}}</td>
+                    <td class="nowrap">{{duration}}</td>
+                    <td>{{summary}}</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="3">No upcoming events.</td>
+                </tr>
+            {{/each}}
+        </table>
+    </script>
+</head>
+<body>
+    <div class="title panel">
+        <h1>
+            Interactive<br>
+            Product<br>
+            Design<br>
+            Lab
+        </h1>
+        <h2>The lab is</h2>
+        <p>
+            <b class="font-big"><span id="fill-the-lab-is">Loading...</span></b>
+        </p>
+        <h2>
+            This Week's
+            <br>Lab Hours
+            <br>(<span id="fill-lab-hours-from-date">xx/xx</span>-<span id="fill-lab-hours-to-date">xx/xx</span>)
+        </h2>
+        <p>
+                <b id="u-day-1" class="u-day">Mon</b> <span id="fill-lab-hours-1" class="fill-lab-hours">9a-6p</span>
+            <br><b id="u-day-2" class="u-day">Tue</b> <span id="fill-lab-hours-2" class="fill-lab-hours">9a-6p</span>
+            <br><b id="u-day-3" class="u-day">Wed</b> <span id="fill-lab-hours-3" class="fill-lab-hours">9a-6p</span>
+            <br><b id="u-day-4" class="u-day">Thu</b> <span id="fill-lab-hours-4" class="fill-lab-hours">9a-6p</span>
+            <br><b id="u-day-5" class="u-day">Fri</b> <span id="fill-lab-hours-5" class="fill-lab-hours">9a-6p</span>
+        </p>
+        <h2>Lab Meetings</h2>
+        <p>
+            Thursdays @ 6p
+        </p>
+    </div>
+
+    <div class="time panel">
+        <span class="title-highlight">
+            <b><span id="fill-date">Jan 1</span></b><br>
+            <span id="fill-time">12:00:00 AM</span><br>
+            <span id="fill-weather-icon"></span> <span id="fill-weather-f">70</span>°F<small>/<span id="fill-weather-c">25</span>°C</small><br>
+        </span>
+    </div>
+
+    <div id="slideshow-main" class="slideshow"></div>
+
+    <div id="slideshow-sub-1" class="slideshow slideshow-sub"></div>
+    <div id="slideshow-sub-2" class="slideshow slideshow-sub"></div>
+    <div id="slideshow-sub-3" class="slideshow slideshow-sub"></div>
+
+    <div class="upcoming-events panel">
+        <h2>Upcoming Events</h2>
+        <div id="fill-upcoming-events"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.4.2/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script src="rrule/dist/es5/rrule.min.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/rrule@2.6.3/dist/es5/rrule.min.js"></script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/scripts/ipdl_display.js"></script>
+    <script src="/scripts/ipdl_p5sketch.js"></script>
+</body>
+</html>

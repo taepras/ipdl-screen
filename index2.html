@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IPDL</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+    <script>
+        var SIZE = 20;
+        var GUTTER = 20;
+        var PADDING_TL = 75;
+
+        var cx, cy;
+        var r = 100;
+        var k = (4 / 3) * Math.tan(Math.PI / 8);
+
+        var linePositions;
+
+        function setup () {
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            frameRate(60);
+            strokeWeight(20);
+            stroke(255);
+            // strokeCap(PROJECT);
+
+            cx = windowWidth / 2;
+            cy = windowHeight / 2;
+            r = windowHeight / 4;
+            k = (4 / 3) * Math.tan(PI / 8);
+
+            linePositionsL = [
+                [
+                    // circle, left half (t-b)
+                    [cx, cy - r],
+                    [cx - r * k, cy - r],
+                    [cx - r, cy - r * k],
+                    [cx - r, cy],
+                    [cx - r, cy + r * k],
+                    [cx - r * k, cy + r ],
+                    [cx, cy + r]
+                ],
+                [
+                    // line, tl-br
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx, cy],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r]
+                ],
+                [
+                    // circle, bottom half
+                    [cx - r, cy],
+                    [cx - r, cy + r * k],
+                    [cx - r * k, cy + r],
+                    [cx, cy + r],
+                    [cx + r * k, cy + r],
+                    [cx + r, cy + r * k],
+                    [cx + r, cy]
+                ],
+                [
+                    // line, bl-tr
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx, cy],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r]
+                ],
+                [
+                    // circle, right half
+                    [cx, cy + r],
+                    [cx + r * k, cy + r ],
+                    [cx + r, cy + r * k],
+                    [cx + r, cy],
+                    [cx + r, cy - r * k],
+                    [cx + r * k, cy - r],
+                    [cx, cy - r]
+                ],
+                [
+                    // line, br-tl
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx, cy],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r]
+                ],
+                [
+                    // circle, top half
+                    [cx + r, cy],
+                    [cx + r, cy - r * k],
+                    [cx + r * k, cy - r],
+                    [cx, cy - r],
+                    [cx - r * k, cy - r],
+                    [cx - r, cy - r * k],
+                    [cx - r, cy]
+                ],
+                [
+                    // line, tr-bl
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx, cy],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r]
+                ]
+            ];
+
+            linePositionsR = [
+                [
+                    // circle, right half (b-t)
+                    [cx, cy + r],
+                    [cx + r * k, cy + r ],
+                    [cx + r, cy + r * k],
+                    [cx + r, cy],
+                    [cx + r, cy - r * k],
+                    [cx + r * k, cy - r],
+                    [cx, cy - r]
+                ],
+                [
+                    // line, tr-bl
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx, cy],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                ],
+                [
+                    // circle, top half
+                    [cx - r, cy],
+                    [cx - r, cy - r * k],
+                    [cx - r * k, cy - r],
+                    [cx, cy - r],
+                    [cx + r * k, cy - r],
+                    [cx + r, cy - r * k],
+                    [cx + r, cy],
+                ],
+                [
+                    // line, br-tl
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx, cy],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                ],
+                [
+                    // circle, left half
+                    [cx, cy - r],
+                    [cx - r * k, cy - r],
+                    [cx - r, cy - r * k],
+                    [cx - r, cy],
+                    [cx - r, cy + r * k],
+                    [cx - r * k, cy + r],
+                    [cx, cy + r]
+                ],
+                [
+                    // line, bl-tr
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx + r, cy - r],
+                    [cx, cy],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                    [cx - r, cy + r],
+                ],
+                [
+                    // circle, bottom half
+                    [cx + r, cy],
+                    [cx + r, cy + r * k],
+                    [cx + r * k, cy + r],
+                    [cx, cy + r],
+                    [cx - r * k, cy + r],
+                    [cx - r, cy + r * k],
+                    [cx - r, cy],
+                ],
+                [
+                    // line, tl-br
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx + r, cy + r],
+                    [cx, cy],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                    [cx - r, cy - r],
+                ],
+                
+            ];
+        }
+
+        function draw () {
+            background(0);
+            
+            var t = new Date() / 6000;
+            t = t - Math.floor(t);
+            var i = t * 6;// linePositionsL.length;
+            console.log(i);
+            
+            stroke(255);
+
+            noFill();
+
+
+            // left half
+            // stroke(255, 0, 0);
+            beginShape();
+            vertex(getPoint(linePositionsL, i, 0, 0), getPoint(linePositionsL, i, 0, 1));
+            bezierVertex(
+                getPoint(linePositionsL, i, 1, 0), getPoint(linePositionsL, i, 1, 1),
+                getPoint(linePositionsL, i, 2, 0), getPoint(linePositionsL, i, 2, 1),
+                getPoint(linePositionsL, i, 3, 0), getPoint(linePositionsL, i, 3, 1));
+            bezierVertex(
+                getPoint(linePositionsL, i, 4, 0), getPoint(linePositionsL, i, 4, 1),
+                getPoint(linePositionsL, i, 5, 0), getPoint(linePositionsL, i, 5, 1),
+                getPoint(linePositionsL, i, 6, 0), getPoint(linePositionsL, i, 6, 1));
+            endShape();
+
+            // stroke(255, 255, 0);
+            beginShape();
+            vertex(getPoint(linePositionsR, i, 0, 0), getPoint(linePositionsR, i, 0, 1));
+            bezierVertex(
+                getPoint(linePositionsR, i, 1, 0), getPoint(linePositionsR, i, 1, 1),
+                getPoint(linePositionsR, i, 2, 0), getPoint(linePositionsR, i, 2, 1),
+                getPoint(linePositionsR, i, 3, 0), getPoint(linePositionsR, i, 3, 1));
+            bezierVertex(
+                getPoint(linePositionsR, i, 4, 0), getPoint(linePositionsR, i, 4, 1),
+                getPoint(linePositionsR, i, 5, 0), getPoint(linePositionsR, i, 5, 1),
+                getPoint(linePositionsR, i, 6, 0), getPoint(linePositionsR, i, 6, 1));
+            endShape();
+        }
+
+        function easeInOutCubic (t, b = 0, c = 1, d = 1) {
+            if ((t/=d/2) < 1) return c/2*t*t*t + b;
+            return c/2*((t-=2)*t*t + 2) + b;
+        }
+
+        function getPoint(lp, i, j, k) {
+            if (i <= lp.length - 1) {
+                var iInt = Math.floor(i);
+                var a = easeInOutCubic(i - iInt);
+                return lp[iInt + 1][j][k] * a + lp[iInt][j][k] * (1 - a)
+            } else {
+                var iInt = Math.floor(i);
+                var a = easeInOutCubic(i - iInt);
+                return lp[0][j][k] * a + lp[iInt][j][k] * (1 - a)
+            }
+        }
+    </script>
+</body>
+</html>
